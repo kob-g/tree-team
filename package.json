@@ -1,0 +1,19 @@
+{
+  "name": "tree-team",
+  "version": "1.0.0",
+  "description": "Progateハッカソンのtreeチームのrepositoryです",
+  "main": "dist/view.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "start": "http-server",
+    "test": "echo  && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.1.6",
+    "http-server": "^0.12.3"
+  }
+}

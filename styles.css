@@ -1,23 +1,77 @@
 body {
   font-family: 'Roboto', sans-serif;
-  background-color: #f4f4f4;
+  background-image: url(img/backimg.jpg);
+  background-size:cover;
+  background-position: center -200px;
+  background-attachment: fixed;
   margin: 0;
   padding: 0;
 }
 
-.container {
-  width: 90%;
-  max-width: 800px;
-  margin: 20px auto;
-  background: #fff;
-  padding: 20px;
+nav {
+  padding: 1%;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h3 {
-  text-align: center;
-  color: #333;
+nav h1{
+  margin: 0;
+  text-align: left
 }
+
+h1 {
+ margin: 3%;
+ text-align: center;
+}
+
+p {
+  text-align: center;
+}
+
+.boxs{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1100px;
+  width: 90%;
+  height: auto;
+  display: flex;
+  text-align: center;
+}
+
+.boxs img{
+  text-align: center;
+}
+
+.boxs :hover{
+  box-shadow: 0 0 10px rgba(108, 208, 255, 0.9);
+  background: rgba(255, 255, 255, 1);
+  opacity: 1; /* 完全に表示 */
+  transition: opacity 0.5s ease, box-shadow 0.5s ease, background-color 0.5s ease;
+}
+
+.box :hover{
+  box-shadow: none;
+}
+
+.box-link {
+  display: block;
+  text-decoration: none; /* リンクの下線を削除 */
+  color: #000;
+}
+
+.box {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+  margin-left: 30px;
+  margin-right: 30px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  border-radius:30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  opacity: 1; /* 完全に表示 */
+  transition: opacity 0.5s ease, box-shadow 0.5s ease, background-color 0.5s ease;
+}
+
 
 .button-group {
   display: flex;
@@ -26,20 +80,7 @@ h1, h3 {
   margin-top: 30px;
 }
 
-.button {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #4CAF50;
-  color: #fff;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, opacity 0.3s;
-}
 
-.button:hover {
-  background-color: #45a049;
-}
 
 section {
   margin-top: 20px;
