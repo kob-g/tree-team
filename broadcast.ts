@@ -220,6 +220,7 @@ async function startBroadcast(): Promise<void> {
             setError("未知のエラーが発生しました。");
         }
     }
+    
 }
 
 // 配信停止
@@ -237,6 +238,7 @@ async function stopBroadcast(): Promise<void> {
             setError("未知のエラーが発生しました。");
         }
     }
+    
 }
 
 // 配信状態の変更ハンドラー
