@@ -2,37 +2,19 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>配信を見る Amazon IVS</title>
+    <title>配信視聴</title>
     <link rel="stylesheet" href="view.css">
     <!-- Amazon IVS Player -->
     <script src="https://player.live-video.net/1.34.1/amazon-ivs-player.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>配信を見る</h1>
-            <p>ローカルでテスト</p>
-        </header>
+    <h1 id="channel-title"></h1>
+    <video id="video-player" controls playsinline></video>
+    <h3 id="player-status">配信停止中</h3>
+    <button id="backButton">戻る</button>
+    <button id="stopStream">停止</button>
+    <button id="resumeStream">再開</button>
 
-        <section>
-            <video id="video-player" controls playsinline></video>
-        </section>
-
-        <section>
-            <!-- 視聴の状態 -->
-            <h3 id="player-status">配信停止中</h3>
-        </section>
-
-        <section>
-            <!-- 視聴開始ボタン -->
-            <button class="button" id="play" onclick="loadStream()">視聴開始</button>
-            <!-- 視聴停止ボタン -->
-            <button class="button" id="stop" disabled onclick="stopStream()">視聴停止</button>
-            <a href="index.html" class="button">戻る</a>
-        </section>
-    </div>
-
-    <!-- JSファイルを読み込み -->
     <script src="dist/view.js"></script>
 </body>
 </html>

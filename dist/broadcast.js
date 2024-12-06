@@ -35,17 +35,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-// ストリームキーとエンドポイントの設定
-var STREAM_KEY = "sk_ap-northeast-1_x22iY0SkaCPV_Ezbc5fDMdmyDtOxbZWNgnqHcTQfJKM";
-var INGEST_ENDPOINT = "a140495bb918.global-contribute.live-video.net";
-var channelConfigs = [
-    ["Basic: Landscape", window.IVSBroadcastClient.BASIC_LANDSCAPE],
-    ["Basic: Portrait", window.IVSBroadcastClient.BASIC_PORTRAIT],
-    ["Standard: Landscape", window.IVSBroadcastClient.STANDARD_LANDSCAPE],
-    ["Standard: Portrait", window.IVSBroadcastClient.STANDARD_PORTRAIT]
-];
 var config = {
-    ingestEndpoint: INGEST_ENDPOINT,
+    ingestEndpoint: '', // 後で設定
     streamConfig: window.IVSBroadcastClient.BASIC_LANDSCAPE, // 低レイテンシー設定
     logLevel: window.IVSBroadcastClient.LOG_LEVEL.DEBUG
 };
@@ -57,15 +48,12 @@ function clearError() {
     }
 }
 function setError(message) {
-    if (Array.isArray(message)) {
-        message = message.join("<br/>");
-    }
     var errorEl = document.getElementById("error");
     if (errorEl) {
         errorEl.innerHTML = message;
     }
 }
-// デバイス取得
+// デバイス取得と初期化
 function getDevices() {
     return __awaiter(this, void 0, void 0, function () {
         var devices, videoDevices, audioDevices, error_1;
@@ -95,7 +83,6 @@ function getDevices() {
         });
     });
 }
-// デバイス選択の初期化
 function initializeDeviceSelect() {
     return __awaiter(this, void 0, void 0, function () {
         var videoSelectEl, audioSelectEl, _a, videoDevices, audioDevices;
@@ -121,7 +108,6 @@ function initializeDeviceSelect() {
         });
     });
 }
-// クライアントの作成
 function createClient() {
     return __awaiter(this, void 0, void 0, function () {
         var previewEl;
@@ -148,7 +134,6 @@ function createClient() {
         });
     });
 }
-// ビデオデバイスの処理
 function handleVideoDeviceSelect() {
     return __awaiter(this, void 0, void 0, function () {
         var id, videoSelectEl, videoDevices, selectedDevice, deviceId, _a, width, height, cameraStream;
@@ -169,15 +154,16 @@ function handleVideoDeviceSelect() {
                     return [4 /*yield*/, getCamera(deviceId, width, height)];
                 case 2:
                     cameraStream = _b.sent();
+                    if (!cameraStream) return [3 /*break*/, 4];
                     return [4 /*yield*/, window.client.addVideoInputDevice(cameraStream, id, { index: 0 })];
                 case 3:
                     _b.sent();
-                    return [2 /*return*/];
+                    _b.label = 4;
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
-// マイクデバイスの処理
 function handleAudioDeviceSelect() {
     return __awaiter(this, void 0, void 0, function () {
         var id, audioSelectEl, audioDevices, selectedDevice, microphoneStream, error_2;
@@ -218,7 +204,6 @@ function handleAudioDeviceSelect() {
         });
     });
 }
-// カメラストリームの取得
 function getCamera(deviceId, maxWidth, maxHeight) {
     return __awaiter(this, void 0, void 0, function () {
         var media, videoConstraints, e_1, error_3;
@@ -242,7 +227,7 @@ function getCamera(deviceId, maxWidth, maxHeight) {
                     return [3 /*break*/, 8];
                 case 3:
                     e_1 = _a.sent();
-                    // 幅と高さの制約を削除して再試行
+                    // 幅と高さの制約を削除して
                     delete videoConstraints.width;
                     delete videoConstraints.height;
                     _a.label = 4;
@@ -265,7 +250,6 @@ function getCamera(deviceId, maxWidth, maxHeight) {
         });
     });
 }
-// フォームのバリデーション（必要なくなるため簡略）
 function validate() {
     // 自動設定のため空
     return [];
@@ -276,7 +260,7 @@ function handleValidationErrors(errors, doNotDisplay) {
     clearError();
     if (errors && errors.length) {
         if (!doNotDisplay) {
-            setError(errors);
+            setError(errors.join("<br/>"));
         }
         start.disabled = true;
         stop.disabled = true;
@@ -287,36 +271,56 @@ function handleValidationErrors(errors, doNotDisplay) {
 // 配信開始
 function startBroadcast() {
     return __awaiter(this, void 0, void 0, function () {
-        var start, stop, err_1;
+        var start, stop, channelNameInput, channelName, response, data, ingestEndpoint, streamKey, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     start = document.getElementById("start");
                     stop = document.getElementById("stop");
+                    channelNameInput = document.getElementById("channel-name");
+                    channelName = channelNameInput.value.trim();
+                    if (!channelName) {
+                        setError("チャネル名を入力してください。");
+                        return [2 /*return*/];
+                    }
                     _a.label = 1;
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
+                    _a.trys.push([1, 6, , 7]);
                     start.disabled = true;
-                    return [4 /*yield*/, window.client.startBroadcast(STREAM_KEY, config.ingestEndpoint)];
+                    return [4 /*yield*/, fetch("https://r397n3i9jl.execute-api.ap-northeast-1.amazonaws.com/tree-prod/createChannel?channelName=".concat(encodeURIComponent(channelName)))];
                 case 2:
+                    response = _a.sent();
+                    return [4 /*yield*/, response.json()];
+                case 3:
+                    data = _a.sent();
+                    if (!response.ok) {
+                        throw new Error(data.error || 'チャネルの作成に失敗しました。');
+                    }
+                    ingestEndpoint = data.ingestEndpoint, streamKey = data.streamKey;
+                    // Configを更新
+                    config.ingestEndpoint = ingestEndpoint;
+                    // クライアントを再作成
+                    return [4 /*yield*/, createClient()];
+                case 4:
+                    // クライアントを再作成
+                    _a.sent();
+                    // 配信を開始
+                    return [4 /*yield*/, window.client.startBroadcast(streamKey, config.ingestEndpoint)];
+                case 5:
+                    // 配信を開始
                     _a.sent();
                     stop.disabled = false;
-                    return [3 /*break*/, 4];
-                case 3:
+                    return [3 /*break*/, 7];
+                case 6:
                     err_1 = _a.sent();
-                    if (err_1 instanceof Error) {
-                        setError(err_1.toString());
-                    }
-                    else {
-                        setError("未知のエラーが発生しました。");
-                    }
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    start.disabled = false;
+                    setError(err_1.message || "未知のエラーが発生しました。");
+                    return [3 /*break*/, 7];
+                case 7: return [2 /*return*/];
             }
         });
     });
 }
-// 配信停止
 function stopBroadcast() {
     return __awaiter(this, void 0, void 0, function () {
         var start, stop_1, err_2;
@@ -334,43 +338,23 @@ function stopBroadcast() {
                     return [3 /*break*/, 3];
                 case 2:
                     err_2 = _a.sent();
-                    if (err_2 instanceof Error) {
-                        setError(err_2.toString());
-                    }
-                    else {
-                        setError("未知のエラーが発生しました。");
-                    }
+                    setError(err_2.message || "配信の停止に失敗しました。");
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
         });
     });
 }
-// 配信状態の変更ハンドラー
 function onActiveStateChange(active) {
     var start = document.getElementById("start");
     var stop = document.getElementById("stop");
     var statusEl = document.getElementById("broadcast-status");
-    // stream-configは使わないため、一旦コメントアウト
-    // const streamConfigSelectEl = document.getElementById("stream-config");
-    // const inputEl = document.getElementById("stream-key");
-    // inputEl.disabled = active;
     start.disabled = active;
     stop.disabled = !active;
-    // streamConfigSelectEl.disabled = active;
     if (statusEl) {
         statusEl.textContent = active ? "配信中" : "配信停止中";
     }
 }
-// ユーザーのクリック後に AudioContext を再開
-document.addEventListener('click', function () {
-    if (typeof AudioContext !== 'undefined') {
-        var audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
-    }
-}, { once: true });
 // 初期化関数
 function init() {
     return __awaiter(this, void 0, void 0, function () {
@@ -378,7 +362,7 @@ function init() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 4, , 5]);
+                    _a.trys.push([0, 3, , 4]);
                     videoSelectEl = document.getElementById("video-devices");
                     audioSelectEl = document.getElementById("audio-devices");
                     return [4 /*yield*/, initializeDeviceSelect()];
@@ -386,23 +370,23 @@ function init() {
                     _a.sent();
                     videoSelectEl.addEventListener("change", handleVideoDeviceSelect, true);
                     audioSelectEl.addEventListener("change", handleAudioDeviceSelect, true);
-                    config.streamConfig = channelConfigs[0][1]; // "Basic: Landscape"
+                    config.streamConfig = window.IVSBroadcastClient.BASIC_LANDSCAPE; // "Basic: Landscape"
                     return [4 /*yield*/, createClient()];
                 case 2:
                     _a.sent();
-                    return [4 /*yield*/, initializeDeviceSelect()];
-                case 3:
-                    _a.sent();
                     handleValidationErrors(validate(), true);
-                    return [3 /*break*/, 5];
-                case 4:
+                    return [3 /*break*/, 4];
+                case 3:
                     err_3 = _a.sent();
                     setError(err_3.message);
-                    return [3 /*break*/, 5];
-                case 5: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
 }
 // ページロード時に初期化
 window.addEventListener("load", init);
+// グローバルスコープに関数を公開
+window.startBroadcast = startBroadcast;
+window.stopBroadcast = stopBroadcast;

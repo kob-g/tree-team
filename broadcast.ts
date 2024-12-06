@@ -146,7 +146,7 @@ async function getCamera(
             audio: true
         });
     } catch (e) {
-        // 幅と高さの制約を削除して再試行
+        // 幅と高さの制約を削除して
         delete videoConstraints.width;
         delete videoConstraints.height;
         try {
