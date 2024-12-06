@@ -1,17 +1,3 @@
-// ストリームキーとエンドポイントの設定
-const STREAM_KEY: string = "sk_ap-northeast-1_x22iY0SkaCPV_Ezbc5fDMdmyDtOxbZWNgnqHcTQfJKM";
-const INGEST_ENDPOINT: string = "a140495bb918.global-contribute.live-video.net";
-
-// チャンネル設定の定義（低レイテンシー）
-type ChannelConfig = [string, any];
-
-const channelConfigs: ChannelConfig[] = [
-    ["Basic: Landscape", (window as any).IVSBroadcastClient.BASIC_LANDSCAPE],
-    ["Basic: Portrait", (window as any).IVSBroadcastClient.BASIC_PORTRAIT],
-    ["Standard: Landscape", (window as any).IVSBroadcastClient.STANDARD_LANDSCAPE],
-    ["Standard: Portrait", (window as any).IVSBroadcastClient.STANDARD_PORTRAIT]
-];
-
 // 初期設定
 interface Config {
     ingestEndpoint: string;
@@ -19,8 +5,8 @@ interface Config {
     logLevel: any;
 }
 
-const config: Config = {
-    ingestEndpoint: INGEST_ENDPOINT,
+let config: Config = {
+    ingestEndpoint: '', // 後で設定
     streamConfig: (window as any).IVSBroadcastClient.BASIC_LANDSCAPE, // 低レイテンシー設定
     logLevel: (window as any).IVSBroadcastClient.LOG_LEVEL.DEBUG
 };
@@ -33,17 +19,14 @@ function clearError(): void {
     }
 }
 
-function setError(message: string | string[]): void {
-    if (Array.isArray(message)) {
-        message = message.join("<br/>");
-    }
+function setError(message: string): void {
     const errorEl = document.getElementById("error");
     if (errorEl) {
         errorEl.innerHTML = message;
     }
 }
 
-// デバイス取得
+// デバイス取得と初期化
 async function getDevices(): Promise<{ videoDevices: MediaDeviceInfo[]; audioDevices: MediaDeviceInfo[] }> {
     try {
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -65,7 +48,6 @@ async function getDevices(): Promise<{ videoDevices: MediaDeviceInfo[]; audioDev
     }
 }
 
-// デバイス選択の初期化
 async function initializeDeviceSelect(): Promise<void> {
     const videoSelectEl = document.getElementById("video-devices") as HTMLSelectElement;
     const audioSelectEl = document.getElementById("audio-devices") as HTMLSelectElement;
@@ -84,7 +66,6 @@ async function initializeDeviceSelect(): Promise<void> {
     audioSelectEl.disabled = false;
 }
 
-// クライアントの作成
 async function createClient(): Promise<void> {
     if ((window as any).client) {
         (window as any).client.delete();
@@ -99,14 +80,13 @@ async function createClient(): Promise<void> {
         }
     );
 
-    const previewEl = document.getElementById("preview") as HTMLVideoElement;
+    const previewEl = document.getElementById("preview") as HTMLCanvasElement;
     (window as any).client.attachPreview(previewEl);
 
     await handleVideoDeviceSelect();
     await handleAudioDeviceSelect();
 }
 
-// ビデオデバイスの処理
 async function handleVideoDeviceSelect(): Promise<void> {
     const id = "camera";
     const videoSelectEl = document.getElementById("video-devices") as HTMLSelectElement;
@@ -120,10 +100,11 @@ async function handleVideoDeviceSelect(): Promise<void> {
     const { width, height } = config.streamConfig.maxResolution;
     const cameraStream = await getCamera(deviceId, width, height);
 
-    await (window as any).client.addVideoInputDevice(cameraStream, id, { index: 0 });
+    if (cameraStream) {
+        await (window as any).client.addVideoInputDevice(cameraStream, id, { index: 0 });
+    }
 }
 
-// マイクデバイスの処理
 async function handleAudioDeviceSelect(): Promise<void> {
     const id = "microphone";
     const audioSelectEl = document.getElementById("audio-devices") as HTMLSelectElement;
@@ -148,7 +129,6 @@ async function handleAudioDeviceSelect(): Promise<void> {
     }
 }
 
-// カメラストリームの取得
 async function getCamera(
     deviceId: string | null,
     maxWidth: number,
@@ -166,7 +146,7 @@ async function getCamera(
             audio: true
         });
     } catch (e) {
-        // 幅と高さの制約を削除して再試行
+        // 幅と高さの制約を削除して
         delete videoConstraints.width;
         delete videoConstraints.height;
         try {
@@ -181,7 +161,6 @@ async function getCamera(
     return media;
 }
 
-// フォームのバリデーション（必要なくなるため簡略）
 function validate(): string[] {
     // 自動設定のため空
     return [];
@@ -194,7 +173,7 @@ function handleValidationErrors(errors: string[], doNotDisplay?: boolean): void 
     clearError();
     if (errors && errors.length) {
         if (!doNotDisplay) {
-            setError(errors);
+            setError(errors.join("<br/>"));
         }
         start.disabled = true;
         stop.disabled = true;
@@ -208,22 +187,42 @@ function handleValidationErrors(errors: string[], doNotDisplay?: boolean): void 
 async function startBroadcast(): Promise<void> {
     const start = document.getElementById("start") as HTMLButtonElement;
     const stop = document.getElementById("stop") as HTMLButtonElement;
+    const channelNameInput = document.getElementById("channel-name") as HTMLInputElement;
+    const channelName = channelNameInput.value.trim();
+
+    if (!channelName) {
+        setError("チャネル名を入力してください。");
+        return;
+    }
 
     try {
         start.disabled = true;
-        await (window as any).client.startBroadcast(STREAM_KEY, config.ingestEndpoint);
-        stop.disabled = false;
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            setError(err.toString());
-        } else {
-            setError("未知のエラーが発生しました。");
+
+        // チャネル作成APIを呼び出す
+        const response = await fetch(`https://r397n3i9jl.execute-api.ap-northeast-1.amazonaws.com/tree-prod/createChannel?channelName=${encodeURIComponent(channelName)}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'チャネルの作成に失敗しました。');
         }
+
+        const { ingestEndpoint, streamKey } = data;
+
+        // Configを更新
+        config.ingestEndpoint = ingestEndpoint;
+
+        // クライアントを再作成
+        await createClient();
+
+        // 配信を開始
+        await (window as any).client.startBroadcast(streamKey, config.ingestEndpoint);
+        stop.disabled = false;
+    } catch (err: any) {
+        start.disabled = false;
+        setError(err.message || "未知のエラーが発生しました。");
     }
-    
 }
 
-// 配信停止
 async function stopBroadcast(): Promise<void> {
     try {
         await (window as any).client.stopBroadcast();
@@ -231,48 +230,23 @@ async function stopBroadcast(): Promise<void> {
         const stop = document.getElementById("stop") as HTMLButtonElement;
         start.disabled = false;
         stop.disabled = true;
-    } catch (err: unknown) {
-        if (err instanceof Error) {
-            setError(err.toString());
-        } else {
-            setError("未知のエラーが発生しました。");
-        }
+    } catch (err: any) {
+        setError(err.message || "配信の停止に失敗しました。");
     }
-    
 }
 
-// 配信状態の変更ハンドラー
 function onActiveStateChange(active: boolean): void {
     const start = document.getElementById("start") as HTMLButtonElement;
     const stop = document.getElementById("stop") as HTMLButtonElement;
     const statusEl = document.getElementById("broadcast-status");
 
-    // stream-configは使わないため、一旦コメントアウト
-    // const streamConfigSelectEl = document.getElementById("stream-config");
-    // const inputEl = document.getElementById("stream-key");
-    // inputEl.disabled = active;
     start.disabled = active;
     stop.disabled = !active;
-    // streamConfigSelectEl.disabled = active;
 
     if (statusEl) {
         statusEl.textContent = active ? "配信中" : "配信停止中";
     }
 }
-
-// ユーザーのクリック後に AudioContext を再開
-document.addEventListener(
-    'click',
-    () => {
-        if (typeof AudioContext !== 'undefined') {
-            const audioCtx = new AudioContext();
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-    },
-    { once: true }
-);
 
 // 初期化関数
 async function init(): Promise<void> {
@@ -285,10 +259,9 @@ async function init(): Promise<void> {
         videoSelectEl.addEventListener("change", handleVideoDeviceSelect, true);
         audioSelectEl.addEventListener("change", handleAudioDeviceSelect, true);
 
-        config.streamConfig = channelConfigs[0][1]; // "Basic: Landscape"
+        config.streamConfig = (window as any).IVSBroadcastClient.BASIC_LANDSCAPE; // "Basic: Landscape"
 
         await createClient();
-        await initializeDeviceSelect();
 
         handleValidationErrors(validate(), true);
     } catch (err: any) {
@@ -298,3 +271,7 @@ async function init(): Promise<void> {
 
 // ページロード時に初期化
 window.addEventListener("load", init);
+
+// グローバルスコープに関数を公開
+(window as any).startBroadcast = startBroadcast;
+(window as any).stopBroadcast = stopBroadcast;

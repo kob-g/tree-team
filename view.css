@@ -14,7 +14,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h3 {
+h1, h3, h2 {
   text-align: center;
   color: #333;
 }
@@ -85,17 +85,30 @@ canvas#preview {
   background-color: #da190b;
 }
 
-/* 配信の状態 */
-#broadcast-status {
-  text-align: center;
-  color: #f44336; /* 赤色 */
-  font-weight: bold;
-}
-
 /* 視聴の状態 */
 #player-status {
   text-align: center;
   color: #f44336; /* 赤色 */
   font-weight: bold;
   margin-top: 10px;
+}
+
+/* 配信者一覧のスタイル */
+#channel-list {
+  list-style: none;
+  padding: 0;
+}
+
+#channel-list li {
+  margin: 5px 0;
+}
+
+#channel-list li a {
+  text-decoration: none;
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+#channel-list li a:hover {
+  text-decoration: underline;
 }
