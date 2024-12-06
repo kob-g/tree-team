@@ -14,7 +14,7 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h3 {
+h1, h3, h2 {
   text-align: center;
   color: #333;
 }
@@ -92,10 +92,8 @@ canvas#preview {
   font-weight: bold;
 }
 
-/* 視聴の状態 */
-#player-status {
+/* エラーメッセージ */
+#error {
+  color: red;
   text-align: center;
-  color: #f44336; /* 赤色 */
-  font-weight: bold;
-  margin-top: 10px;
 }

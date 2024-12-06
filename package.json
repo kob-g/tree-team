@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Progateハッカソンのtreeチームのrepositoryです",
   "main": "dist/view.js",
+  "type": "module",
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
