@@ -1,3 +1,4 @@
+/* ベーススタイル */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #f4f4f4;
@@ -7,23 +8,45 @@ body {
 
 .container {
   width: 90%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 20px auto;
   background: #fff;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h3, h2 {
+/* 見出しとテキスト */
+h1, h3 {
   text-align: center;
   color: #333;
 }
 
+h3#player-status {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+/* 動画プレイヤー */
+.video-section {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#video-player {
+  width: 100%;
+  height: auto;
+  background: #000;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ボタン */
 .button-group {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-top: 30px;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .button {
@@ -41,33 +64,12 @@ h1, h3, h2 {
   background-color: #45a049;
 }
 
-section {
-  margin-top: 20px;
+#stopStream:not(:disabled) {
+  background-color: #f44336;
 }
 
-label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
-}
-
-input[type="text"], select {
-  width: 100%;
-  padding: 8px;
-  margin-top: 5px;
-  box-sizing: border-box;
-}
-
-video {
-  width: 100%;
-  height: auto;
-  background: #000;
-}
-
-canvas#preview {
-  width: 100%;
-  height: 300px;
-  background: #000;
+#stopStream:not(:disabled):hover {
+  background-color: #da190b;
 }
 
 /* 無効なボタンのスタイル */
@@ -76,39 +78,68 @@ canvas#preview {
   cursor: not-allowed;
 }
 
-/* 配信停止ボタンが有効な場合のスタイル */
-#stop:not(:disabled) {
-  background-color: #f44336;
-}
-
-#stop:not(:disabled):hover {
-  background-color: #da190b;
-}
-
-/* 視聴の状態 */
+/* 状態表示 */
 #player-status {
-  text-align: center;
   color: #f44336; /* 赤色 */
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* 配信者一覧のスタイル */
-#channel-list {
-  list-style: none;
-  padding: 0;
-}
-
-#channel-list li {
-  margin: 5px 0;
-}
-
-#channel-list li a {
-  text-decoration: none;
-  color: #4CAF50;
+  text-align: center;
   font-weight: bold;
 }
 
-#channel-list li a:hover {
-  text-decoration: underline;
+/* チャットセクション */
+.view-chat-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.view-section {
+  flex: 2;
+  margin-right: 20px;
+}
+
+.chat-section {
+  flex: 1;
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #ddd;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+/* チャットコンテナ */
+#chat-container {
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-messages {
+  flex-grow: 1;
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  padding: 5px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+#chat-input {
+  margin-bottom: 10px;
+  padding: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #45a049;
 }
