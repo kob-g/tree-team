@@ -199,7 +199,7 @@ async function startBroadcast(): Promise<void> {
         start.disabled = true;
 
         // チャネル作成APIを呼び出す
-        const response = await fetch(`https://r397n3i9jl.execute-api.ap-northeast-1.amazonaws.com/tree-prod/createChannel?channelName=${encodeURIComponent(channelName)}`);
+        const response = await fetch(`https://xyrmdiuws0.execute-api.us-west-2.amazonaws.com/tree-pro/createChannel?channelName=${encodeURIComponent(channelName)}`);
         const data = await response.json();
 
         if (!response.ok) {

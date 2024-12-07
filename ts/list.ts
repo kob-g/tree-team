@@ -16,7 +16,7 @@ interface ActiveChannel {
 
   async function fetchActiveChannels() {
     try {
-        const response = await fetch('https://r397n3i9jl.execute-api.ap-northeast-1.amazonaws.com/tree-prod/listChannels');
+        const response = await fetch('https://xyrmdiuws0.execute-api.us-west-2.amazonaws.com/tree-pro/listChannels');
         const channels = await response.json();
 
         // APIがオブジェクトを返した場合、配列に変換
