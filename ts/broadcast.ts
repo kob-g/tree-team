@@ -206,7 +206,7 @@ async function startBroadcast(): Promise<void> {
             throw new Error(data.error || 'チャネルの作成に失敗しました。');
         }
 
-        const { ingestEndpoint, streamKey } = data;
+        const { ingestEndpoint, streamKey, roomID } = data;
 
         // Configを更新
         config.ingestEndpoint = ingestEndpoint;
@@ -216,6 +216,7 @@ async function startBroadcast(): Promise<void> {
 
         // 配信を開始
         await (window as any).client.startBroadcast(streamKey, config.ingestEndpoint);
+        connectChatRoom(roomID);
         stop.disabled = false;
     } catch (err: any) {
         start.disabled = false;
@@ -247,6 +248,8 @@ function onActiveStateChange(active: boolean): void {
         statusEl.textContent = active ? "配信中" : "配信停止中";
     }
 }
+
+
 
 // 初期化関数
 async function init(): Promise<void> {

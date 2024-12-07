@@ -271,7 +271,7 @@ function handleValidationErrors(errors, doNotDisplay) {
 // 配信開始
 function startBroadcast() {
     return __awaiter(this, void 0, void 0, function () {
-        var start, stop, channelNameInput, channelName, response, data, ingestEndpoint, streamKey, err_1;
+        var start, stop, channelNameInput, channelName, response, data, ingestEndpoint, streamKey, roomID, err_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -296,7 +296,7 @@ function startBroadcast() {
                     if (!response.ok) {
                         throw new Error(data.error || 'チャネルの作成に失敗しました。');
                     }
-                    ingestEndpoint = data.ingestEndpoint, streamKey = data.streamKey;
+                    ingestEndpoint = data.ingestEndpoint, streamKey = data.streamKey, roomID = data.roomID;
                     // Configを更新
                     config.ingestEndpoint = ingestEndpoint;
                     // クライアントを再作成
@@ -309,6 +309,7 @@ function startBroadcast() {
                 case 5:
                     // 配信を開始
                     _a.sent();
+                    connectChatRoom(roomID);
                     stop.disabled = false;
                     return [3 /*break*/, 7];
                 case 6:
