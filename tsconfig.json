@@ -3,7 +3,7 @@
       "target": "es5",
       "module": "commonjs",
       "lib": ["dom", "es6"],
-      "outDir": "ts/./dist",
+      "outDir": "ts/../dist",
       "strict": true,
       "esModuleInterop": true,
       "skipLibCheck": true
