@@ -1,17 +1,19 @@
 const API_BASE_URL = "https://pa8ltq3lw3.execute-api.us-west-2.amazonaws.com";
-let roomID = "";
+let roomID_params = "";
 let chatToken = "";
 const params = new URLSearchParams(window.location.search);
 const socket = "wss://edge.ivschat.us-west-2.amazonaws.com";
 let connection: WebSocket | null = null;
 
 if (params.get("roomID")) {
-    roomID = params.get("roomID") as string;
-    connectChatRoom(roomID);
+    roomID_params = params.get("roomID") as string;
+    connectChatRoom(roomID_params);
 }
 
 async function connectChatRoom(roomID: string): Promise<void> {
     try {
+        roomID_params = roomID;
+
         const response = await fetch(`${API_BASE_URL}/connectChatRoom?roomID=${encodeURIComponent(roomID)}`, {
             method: "GET"
         });
@@ -54,7 +56,7 @@ async function sendChat(): Promise<void> {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                roomID: roomID,
+                roomID: roomID_params,
                 message: message
             })
         });

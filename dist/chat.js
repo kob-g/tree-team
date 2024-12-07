@@ -36,14 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var API_BASE_URL = "https://pa8ltq3lw3.execute-api.us-west-2.amazonaws.com";
-var roomID = "";
+var roomID_params = "";
 var chatToken = "";
 var params = new URLSearchParams(window.location.search);
 var socket = "wss://edge.ivschat.us-west-2.amazonaws.com";
 var connection = null;
 if (params.get("roomID")) {
-    roomID = params.get("roomID");
-    connectChatRoom(roomID);
+    roomID_params = params.get("roomID");
+    connectChatRoom(roomID_params);
 }
 function connectChatRoom(roomID) {
     return __awaiter(this, void 0, void 0, function () {
@@ -52,6 +52,7 @@ function connectChatRoom(roomID) {
             switch (_a.label) {
                 case 0:
                     _a.trys.push([0, 3, , 4]);
+                    roomID_params = roomID;
                     return [4 /*yield*/, fetch("".concat(API_BASE_URL, "/connectChatRoom?roomID=").concat(encodeURIComponent(roomID)), {
                             method: "GET"
                         })];
@@ -103,7 +104,7 @@ function sendChat() {
                                 "Content-Type": "application/json",
                             },
                             body: JSON.stringify({
-                                roomID: roomID,
+                                roomID: roomID_params,
                                 message: message
                             })
                         })];
