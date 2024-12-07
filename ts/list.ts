@@ -32,7 +32,7 @@ interface ActiveChannel {
             const viewButton = document.createElement('button');
             viewButton.textContent = "表示";
             viewButton.onclick = () => {
-                location.href = `view.html?playbackUrl=${encodeURIComponent(channel.playbackUrl)}&channelName=${encodeURIComponent(channel.channelName)}`;
+                location.href = `view.html?playbackUrl=${encodeURIComponent(channel.playbackUrl)}&channelName=${encodeURIComponent(channel.channelName)}&roomID=${encodeURIComponent(channel.chatRoomID)}`;
             };
 
             listItem.appendChild(nameSpan);

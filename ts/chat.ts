@@ -70,34 +70,7 @@ async function sendChat(): Promise<void> {
     }
 }
 
-async function createChatRoom(): Promise<void> {
-    const roomName = prompt("ルーム名を決めましょう");
 
-    if (!roomName) {
-        alert("ルーム名を再度入力して下さい");
-        return;
-    }
-
-    try {
-        const response = await fetch(`${API_BASE_URL}/createChatRoom`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                roomName: roomName,
-            }),
-        });
-
-        const data = await response.json() as { roomID: string };
-        const createdRoomID = data.roomID;
-        window.location.href = `http://localhost:8888/hackason/test?roomID=${encodeURIComponent(createdRoomID)}`;
-        console.log(data);
-    } catch (error: any) {
-        console.log(`Error: ${error}`);
-    }
-}
 
 // HTMLから呼び出せるようにwindowオブジェクトに紐づける
 (window as any).sendChat = sendChat;
-(window as any).createChatRoom = createChatRoom;
