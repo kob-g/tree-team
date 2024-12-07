@@ -59,7 +59,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 var viewButton = document.createElement('button');
                                 viewButton.textContent = "表示";
                                 viewButton.onclick = function () {
-                                    location.href = "view.html?playbackUrl=".concat(encodeURIComponent(channel.playbackUrl), "&channelName=").concat(encodeURIComponent(channel.channelName));
+                                    location.href = "view.html?playbackUrl=".concat(encodeURIComponent(channel.playbackUrl), "&channelName=").concat(encodeURIComponent(channel.channelName), "&roomID=").concat(encodeURIComponent(channel.chatRoomID));
                                 };
                                 listItem.appendChild(nameSpan);
                                 listItem.appendChild(viewButton);
