@@ -29,7 +29,6 @@ interface ActiveChannel {
             const listItem = document.createElement('li');
             const nameSpan = document.createElement('span');
             nameSpan.textContent = channel.channelName || "Unknown Channel";
-
             const viewButton = document.createElement('button');
             viewButton.textContent = "表示";
             viewButton.onclick = () => {
