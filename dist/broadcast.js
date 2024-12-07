@@ -287,7 +287,7 @@ function startBroadcast() {
                 case 1:
                     _a.trys.push([1, 6, , 7]);
                     start.disabled = true;
-                    return [4 /*yield*/, fetch("https://r397n3i9jl.execute-api.ap-northeast-1.amazonaws.com/tree-prod/createChannel?channelName=".concat(encodeURIComponent(channelName)))];
+                    return [4 /*yield*/, fetch("https://xyrmdiuws0.execute-api.us-west-2.amazonaws.com/tree-pro/createChannel?channelName=".concat(encodeURIComponent(channelName)))];
                 case 2:
                     response = _a.sent();
                     return [4 /*yield*/, response.json()];

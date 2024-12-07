@@ -44,7 +44,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                     switch (_a.label) {
                         case 0:
                             _a.trys.push([0, 3, , 4]);
-                            return [4 /*yield*/, fetch('https://r397n3i9jl.execute-api.ap-northeast-1.amazonaws.com/tree-prod/listChannels')];
+                            return [4 /*yield*/, fetch('https://xyrmdiuws0.execute-api.us-west-2.amazonaws.com/tree-pro/listChannels')];
                         case 1:
                             response = _a.sent();
                             return [4 /*yield*/, response.json()];
