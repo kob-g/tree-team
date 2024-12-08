@@ -6,13 +6,23 @@ body {
   padding: 0;
 }
 
+nav {
+  padding: 1%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+nav h1{
+  margin: 0;
+  text-align: left
+}
+
 .container {
   width: 90%;
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 20px auto;
-  background: #fff;
+  margin-top: 0%;
+  background:rgba(255, 255, 255, 0);
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* 見出しとテキスト */
@@ -30,6 +40,10 @@ h3#player-status {
 .video-section {
   margin-bottom: 20px;
   text-align: center;
+}
+
+#channel-title {
+  margin-top: 0%;
 }
 
 .video-container {
@@ -55,13 +69,23 @@ h3#player-status {
   margin-top: 15px;
 }
 
+.buttons {
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 15px;
+  padding:1%;
+}
+
 .button {
-  display: inline-block;
-  padding: 10px 20px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px; /* 円形にするための固定幅 */
+  height: 50px; /* 円形にするための固定高さ */
   background-color: #4CAF50;
   color: #fff;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
   transition: background-color 0.3s, opacity 0.3s;
 }
@@ -70,8 +94,40 @@ h3#player-status {
   background-color: #45a049;
 }
 
+#backButton {
+  border-radius: 50%;
+  width: 50px; /* 固定サイズを指定 */
+  height: 50px; /* 固定サイズを指定 */
+  background-image: url(../img/back.png);
+  background-repeat: no-repeat;
+  background-size: 75%; /* 画像をボタン内にフィットさせる */
+  background-position: center; /* 中央揃え */
+  margin-right: 300px;
+}
+
+#resumeStream {
+  border-radius: 50%;
+  width: 50px; /* 固定サイズを指定 */
+  height: 50px; /* 固定サイズを指定 */
+  background-image: url(../img/start.png);
+  background-repeat: no-repeat;
+  background-size: 35%; /* 画像をボタン内にフィットさせる */
+  background-position: center; /* 中央揃え */
+}
+
+#stopStream {
+  width: 50px; /* 固定サイズを指定 */
+  height: 50px; /* 固定サイズを指定 */
+  border-radius: 50%;background-image: url(../img/stop.png);
+  background-repeat: no-repeat;
+  background-size: 35%; /* 画像をボタン内にフィットさせる */
+  background-position: center;
+  margin-right: 300px;
+}
+
 #stopStream:not(:disabled) {
   background-color: #f44336;
+  
 }
 
 #stopStream:not(:disabled):hover {
@@ -100,16 +156,21 @@ h3#player-status {
 
 .view-section {
   flex: 2;
-  margin-right: 20px;
+  margin-right: 5%;
 }
 
 .chat-section {
   flex: 1;
+  height: 650px;
   background: #fff;
+  background-image: url(../img/tree.png);
+  background-color:rgba(255,255,255,0.8);
+  background-blend-mode:lighten;
+  top: 50%;
   padding: 10px;
   border: 1px solid #ddd;
+  border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
 }
 
 /* チャットコンテナ */
@@ -153,12 +214,12 @@ button:hover {
 /* チャットメッセージのコンテナを相対位置に設定 */
 #chat-messages {
   position: relative;
-  width: 100%;
-  height: 300px;
+  width: 95%;
+  height: 450px;
   overflow: hidden; /* はみ出した部分を隠す */
   border: 1px solid #ddd;
   padding: 5px;
-  background: #f9f9f9;
+  background: rgb(255, 255, 255, 0);
   border-radius: 5px;
   margin-bottom: 10px;
 }
