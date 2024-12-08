@@ -32,6 +32,12 @@ h3#player-status {
   text-align: center;
 }
 
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%; /* 動画のサイズに合わせる */
+}
+
 #video-player {
   width: 100%;
   height: auto;
@@ -142,4 +148,61 @@ button {
 
 button:hover {
   background-color: #45a049;
+}
+
+/* チャットメッセージのコンテナを相対位置に設定 */
+#chat-messages {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  overflow: hidden; /* はみ出した部分を隠す */
+  border: 1px solid #ddd;
+  padding: 5px;
+  background: #f9f9f9;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+/* チャットメッセージのスタイル */
+.chat-message {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 14px;
+  color: #333;
+  padding: 5px 10px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+/* 弾幕チャット用のオーバーレイコンテナ */
+#bullet-chat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* ユーザーの操作を妨げないように */
+  overflow: hidden;
+  z-index: 10; /* 動画の上に表示 */
+}
+
+/* 弾幕メッセージのスタイル */
+.bullet-message {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 20px;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  animation: move-left 10s linear forwards;
+}
+
+/* アニメーションの定義 */
+@keyframes move-left {
+  from {
+      left: 100%;
+  }
+  to {
+      left: -100%;
+  }
 }

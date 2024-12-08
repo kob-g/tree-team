@@ -12,6 +12,9 @@
     var playbackUrl = urlParams.get('playbackUrl') || '';
     var channelName = urlParams.get('channelName') || '';
     channelTitle.textContent = channelName ? "\u914D\u4FE1\u8005: ".concat(channelName) : "配信視聴";
+    if (channelTitle.textContent) {
+        channelTitle.textContent = channelTitle.textContent.slice(0, -37);
+    }
     function initializePlayer(streamUrl) {
         if (!IVSPlayerPackage.isPlayerSupported) {
             statusElement.innerHTML = "このブラウザはIVSプレーヤーをサポートしていません。";

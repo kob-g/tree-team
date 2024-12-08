@@ -12,11 +12,17 @@
             <!-- 配信視聴 -->
             <section class="view-section">
                 <h1 id="channel-title"></h1>
-                <video id="video-player" controls playsinline></video>
+                <div class="video-container">
+                    <video id="video-player" controls playsinline></video>
+                    <!-- 弾幕チャット用オーバーレイコンテナ -->
+                    <div id="bullet-chat"></div>
+                </div>
                 <h3 id="player-status">配信停止中</h3>
                 <button id="backButton">戻る</button>
                 <button id="stopStream">停止</button>
                 <button id="resumeStream">再開</button>
+
+                
             </section>
 
             <!-- チャットルーム -->

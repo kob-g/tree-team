@@ -72,6 +72,7 @@ function connectChatRoom(roomID) {
                         var parsed = JSON.parse(received);
                         var message = ((_a = parsed.Attributes) === null || _a === void 0 ? void 0 : _a.message) || "No Message";
                         console.log(message);
+                        displayBulletChat(message); // 弾幕チャットを表示
                         var chatMessages = document.getElementById("chat-messages");
                         if (chatMessages) {
                             var newMessage = document.createElement("div");
@@ -125,6 +126,24 @@ function sendChat() {
                 case 4: return [2 /*return*/];
             }
         });
+    });
+}
+// 弾幕チャットを表示する関数
+function displayBulletChat(message) {
+    var bulletChatContainer = document.getElementById("bullet-chat");
+    if (!bulletChatContainer)
+        return;
+    var messageDiv = document.createElement("div");
+    messageDiv.classList.add("bullet-message");
+    messageDiv.textContent = message;
+    // ランダムな垂直位置を設定（画面上のどこかに表示）
+    var maxHeight = bulletChatContainer.clientHeight - 30; // メッセージの高さを考慮
+    var randomTop = Math.floor(Math.random() * maxHeight);
+    messageDiv.style.top = "".concat(randomTop, "px");
+    bulletChatContainer.appendChild(messageDiv);
+    // アニメーションが完了したらメッセージを削除
+    messageDiv.addEventListener('animationend', function () {
+        bulletChatContainer.removeChild(messageDiv);
     });
 }
 // HTMLから呼び出せるようにwindowオブジェクトに紐づける

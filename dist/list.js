@@ -56,6 +56,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
                                 var listItem = document.createElement('li');
                                 var nameSpan = document.createElement('span');
                                 nameSpan.textContent = channel.channelName || "Unknown Channel";
+                                if (nameSpan.textContent) {
+                                    nameSpan.textContent = nameSpan.textContent.slice(0, -37);
+                                }
                                 var viewButton = document.createElement('button');
                                 viewButton.textContent = "表示";
                                 viewButton.onclick = function () {

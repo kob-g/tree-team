@@ -33,6 +33,8 @@ async function connectChatRoom(roomID: string): Promise<void> {
 
             console.log(message);
 
+            displayBulletChat(message); // 弾幕チャットを表示
+
             const chatMessages = document.getElementById("chat-messages");
             if (chatMessages) {
                 const newMessage = document.createElement("div");
@@ -72,7 +74,27 @@ async function sendChat(): Promise<void> {
     }
 }
 
+// 弾幕チャットを表示する関数
+function displayBulletChat(message: string): void {
+    const bulletChatContainer = document.getElementById("bullet-chat");
+    if (!bulletChatContainer) return;
 
+    const messageDiv = document.createElement("div");
+    messageDiv.classList.add("bullet-message");
+    messageDiv.textContent = message;
+
+    // ランダムな垂直位置を設定（画面上のどこかに表示）
+    const maxHeight = bulletChatContainer.clientHeight - 30; // メッセージの高さを考慮
+    const randomTop = Math.floor(Math.random() * maxHeight);
+    messageDiv.style.top = `${randomTop}px`;
+
+    bulletChatContainer.appendChild(messageDiv);
+
+    // アニメーションが完了したらメッセージを削除
+    messageDiv.addEventListener('animationend', () => {
+        bulletChatContainer.removeChild(messageDiv);
+    });
+}
 
 // HTMLから呼び出せるようにwindowオブジェクトに紐づける
 (window as any).sendChat = sendChat;
