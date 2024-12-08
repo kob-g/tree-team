@@ -224,15 +224,55 @@ async function startBroadcast(): Promise<void> {
     }
 }
 
+// 配信状態を更新する関数
+async function updateStreamingStatus(name: string): Promise<void> {
+    try {
+        const response = await fetch(`https://xmo6yfq55h.execute-api.us-west-2.amazonaws.com/tree-prod/updateStreamingStatus`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "text/plain",
+            },
+            body: name, // 文字列を送信
+        });
+
+        const data = await response.text(); // レスポンスをテキストとして取得
+
+        if (!response.ok) {
+            throw new Error(data || "配信状態の更新に失敗しました。");
+        }
+
+        console.log("配信状態を更新しました:", data);
+    } catch (error: any) {
+        console.error("配信状態の更新中にエラーが発生しました:", error.message);
+        setError("配信状態の更新中にエラーが発生しました。");
+    }
+}
+
+
+
+// 配信停止
 async function stopBroadcast(): Promise<void> {
     try {
         await (window as any).client.stopBroadcast();
+
+        // 配信状態を更新する
+        const channelNameInput = document.getElementById("channel-name") as HTMLInputElement;
+        const channelName = channelNameInput.value.trim();
+
+        if (!channelName) {
+            throw new Error("チャネル名が指定されていない");
+        }
+
+        await updateStreamingStatus(channelName);
+
         const start = document.getElementById("start") as HTMLButtonElement;
         const stop = document.getElementById("stop") as HTMLButtonElement;
         start.disabled = false;
         stop.disabled = true;
+
+        console.log("配信停止完了");
     } catch (err: any) {
-        setError(err.message || "配信の停止に失敗しました。");
+        setError(err.message || "配信の停止に失敗しまし");
     }
 }
 
