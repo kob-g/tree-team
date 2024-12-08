@@ -18,9 +18,9 @@ interface Window {
     const channelName = urlParams.get('channelName') || '';
 
     channelTitle.textContent = channelName ? `配信者: ${channelName}` : "配信視聴";
-    
-    //listと同じで、後ろの36字を削除
-    channelTitle.textContent = channelTitle.textContent.slice(0, -37);
+    if (channelTitle.textContent) {
+        channelTitle.textContent = channelTitle.textContent.slice(0, -37);
+    }
 
     function initializePlayer(streamUrl: string): void {
         if (!IVSPlayerPackage.isPlayerSupported) {

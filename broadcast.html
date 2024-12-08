@@ -7,6 +7,9 @@
     <script src="https://web-broadcast.live-video.net/1.18.0/amazon-ivs-web-broadcast.js"></script>
 </head>
 <body>
+    <nav>
+        <h1>Amazon IVS アプリ</h1>
+    </nav>
     <div class="container">
         <header>
             <h1>配信する</h1>
@@ -15,33 +18,41 @@
         <div class="broadcast-chat-container">
             <!-- 配信 -->
             <section class="broadcast-section">
-                <canvas id="preview"></canvas>
+                <div class="video-container">
+                    <canvas id="preview"></canvas>
+
+                    <!-- 弾幕チャット用オーバーレイコンテナ -->
+                    <div id="bullet-chat"></div>
+                </div>
 
                 <section>
                     <h3 id="error" style="color: red;"></h3>
                 </section>
-        
-                <section>
-                    <label for="channel-name">チャネル名を入力してください</label>
-                    <input type="text" id="channel-name" placeholder="チャネル名">
-                </section>
-        
-                <section>
-                    <label for="video-devices">ウェブカメラを選択</label>
-                    <select disabled id="video-devices">
-                        <option selected disabled>オプションを選択</option>
-                    </select>
-        
-                    <label for="audio-devices">マイクを選択</label>
-                    <select disabled id="audio-devices">
-                        <option selected disabled>オプションを選択</option>
-                    </select>
-                </section>
-                
+
                 <h3 id="broadcast-status">配信停止中</h3>
-                <button class="button" id="start" disabled onclick="startBroadcast()">配信開始</button>
-                <button class="button" id="stop" disabled onclick="stopBroadcast()">配信停止</button>
-                <a href="index.html" class="button">戻る</a>
+                <div class="setting">
+                    <p>配信設定画面</p>
+                    <section>
+                        <label for="channel-name">チャネル名を入力してください</label>
+                        <input type="text" id="channel-name" placeholder="チャネル名">
+                    </section>
+            
+                    <section>
+                        <label for="video-devices">ウェブカメラを選択</label>
+                        <select disabled id="video-devices">
+                            <option selected disabled>オプションを選択</option>
+                        </select>
+            
+                        <label for="audio-devices">マイクを選択</label>
+                        <select disabled id="audio-devices">
+                            <option selected disabled>オプションを選択</option>
+                        </select>
+                    </section>
+                    
+                    <button class="button" id="start" disabled onclick="startBroadcast()">配信開始</button>
+                    <button class="button" id="stop" disabled onclick="stopBroadcast()">配信停止</button>
+                    <a href="index.html" class="button">戻る</a>
+                </div>
             </section>
 
             <!-- チャットルーム -->

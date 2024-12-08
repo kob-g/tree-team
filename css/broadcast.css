@@ -5,18 +5,31 @@ body {
   padding: 0;
 }
 
+nav {
+  padding: 1%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+nav h1{
+  margin: 0;
+  text-align: left
+}
+
 .container {
   width: 90%;
-  max-width: 1000px;
+  max-width: 1300px;
   margin: 20px auto;
-  background: #fff;
+  background:rgba(255, 255, 255, 0);
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1, h3, h2 {
   text-align: center;
   color: #333;
+}
+
+header h1{
+  margin: 0;
 }
 
 .button-group {
@@ -66,7 +79,6 @@ video {
 
 canvas#preview {
   width: 100%;
-  height: 400px;
   background: #000;
 }
 
@@ -105,14 +117,38 @@ canvas#preview {
 
 .broadcast-section {
   flex: 2;
-  margin-right: 20px;
+  margin-right: 5%;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 100%; /* 動画のサイズに合わせる */
+}
+
+.setting{
+  background: white;
+  padding: 3%;
+  border-radius: 30px;
+}
+
+.setting p {
+  font-size: 20px;
+  text-align: center;
+  margin: 0%;
 }
 
 .chat-section {
   flex: 1;
+  height: 650px;
   background: #fff;
+  background-image: url(../img/tree.png);
+  background-color:rgba(255,255,255,0.8);
+  background-blend-mode:lighten;
+  top: 50%;
   padding: 10px;
   border: 1px solid #ddd;
+  border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -139,4 +175,36 @@ canvas#preview {
 
 button {
   margin-top: 5px;
+}
+
+/* 弾幕チャット用のオーバーレイコンテナ */
+#bullet-chat {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* ユーザーの操作を妨げないように */
+  overflow: hidden;
+  z-index: 10; /* 動画の上に表示 */
+}
+
+/* 弾幕メッセージのスタイル */
+.bullet-message {
+  position: absolute;
+  white-space: nowrap;
+  font-size: 20px;
+  color: #fff;
+  text-shadow: 1px 1px 2px #000;
+  animation: move-left 10s linear forwards;
+}
+
+/* アニメーションの定義 */
+@keyframes move-left {
+  from {
+      left: 100%;
+  }
+  to {
+      left: -100%;
+  }
 }
